@@ -2,6 +2,7 @@
 
 
 #include "EnemyFactory.h"
+#include "EnemyActor.h"
 
 // Sets default values
 AEnemyFactory::AEnemyFactory()
@@ -22,6 +23,19 @@ void AEnemyFactory::BeginPlay()
 void AEnemyFactory::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+    
+    //경과된 시간이 생성할 시간을 초과했다면
+    if (currentTime >  delayTime)
+    {
+        currentTime = 0;
+        
+        //enemy 변수에 할당된 블루프린트를 자신의 위치에 생성한다.
+        AEnemyActor* spawnActor = GetWorld() -> SpawnActor<AEnemyActor>(enemy, GetActorLocation(),GetActorRotation());
+    }
+    else
+    {
+        //현재 프레임의 경과 시간을 누적시킨다
+        currentTime += DeltaTime;
+    }
 }
 

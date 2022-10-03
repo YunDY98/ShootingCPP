@@ -4,6 +4,9 @@
 #include "Bullet.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/ArrowComponent.h"
+#include "EnemyActor.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ABullet::ABullet()
@@ -29,6 +32,9 @@ ABullet::ABullet()
     //박스 콜라이더 컴포넌트의 자식 컴포넌트로 설정한다.
     meshComp->SetupAttachment(boxComp);
     
+    //박스 컴포넌트의 콜리전 프리셋을 Bullet으로 설정한다
+    boxComp -> SetCollisionProfileName(TEXT("Bullet"));
+    
   
 
 }
@@ -37,6 +43,10 @@ ABullet::ABullet()
 void ABullet::BeginPlay()
 {
 	Super::BeginPlay();
+    
+    //박스 컴포넌트의 충돌 오버랩 이벤트에 BulletOverlap 함수를 연결한다
+    boxComp -> OnComponentBeginOverlap.AddDynamic(this,&ABullet::OnBulletOverlap);
+ 
 	
 }
 
@@ -52,5 +62,28 @@ void ABullet::Tick(float DeltaTime)
     SetActorLocation(newLocation);
     
     
+}
+
+//충돌 이벤트가 발생할 때 실행할 함수
+void ABullet::OnBulletOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+                              UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+                              const FHitResult& SweepResult)
+{
+    //충돌할 액터를 AEnemyActor클래스로 변환해본다.
+    AEnemyActor* enemy = Cast<AEnemyActor>(OtherActor);
+    
+    //만일, 캐스팅이 정상적으로 되어서 AEnemyActor 포인터 변수에 값이 있다면..
+    if(enemy != nullptr)
+    {
+        //충돌한 액터를 제거한다.
+        OtherActor -> Destroy();
+        
+        //폭발 이펙트를 생성한다
+        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),explosionFX,GetActorLocation(),
+                                                 GetActorRotation());
+    }
+    
+    //자기 자신을 제거한다
+   // Destroy();
 }
 

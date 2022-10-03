@@ -18,9 +18,18 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+    
+    UPROPERTY(EditAnywhere)
+    float delayTime = 2.0f;
+    
+    UPROPERTY(EditAnywhere)
+    TSubclassOf<class AEnemyActor> enemy;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+    
+private:
+    float currentTime = 0;
 
 };
