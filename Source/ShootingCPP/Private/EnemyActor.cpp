@@ -95,6 +95,6 @@ void AEnemyActor::OnEnemyOverlap(UPrimitiveComponent* OverlappedComponent, AActo
     }
     
     //자기 자신을 제거한다
-   // Destroy();
+   Destroy();
 }
 

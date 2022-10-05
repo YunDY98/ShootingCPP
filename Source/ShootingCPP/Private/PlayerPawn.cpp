@@ -46,7 +46,7 @@ APlayerPawn::APlayerPawn()
     boxComp -> SetCollisionObjectType(ECC_GameTraceChannel1);
     
     //모든 채널을 충돌 응답 없음으로 설정한다
-    boxComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+    boxComp -> SetCollisionResponseToAllChannels(ECR_Ignore);
     
     //적과 충돌 이벤트 체크(Quary)를 한다
     boxComp -> SetCollisionResponseToChannel(ECC_GameTraceChannel2,ECR_Overlap);

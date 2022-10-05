@@ -84,6 +84,6 @@ void ABullet::OnBulletOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
     }
     
     //자기 자신을 제거한다
-   // Destroy();
+    Destroy();
 }
 
